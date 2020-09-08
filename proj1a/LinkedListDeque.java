@@ -1,5 +1,3 @@
-import java.awt.desktop.PreferencesEvent;
-
 public class LinkedListDeque<T> {
 
     private class Node {
@@ -58,7 +56,7 @@ public class LinkedListDeque<T> {
     }
 
     public T removeFirst() {
-        if(size == 0) {
+        if (size == 0) {
             return null;
         }
         T removedItem = sentinel.next.item;
@@ -69,7 +67,7 @@ public class LinkedListDeque<T> {
     }
 
     public T removeLast() {
-        if(size == 0) {
+        if (size == 0) {
             return null;
         }
         T removedItem = sentinel.prev.item;
@@ -92,10 +90,10 @@ public class LinkedListDeque<T> {
     }
 
     private Node getNodeRecursive(Node first, int index) {
-        if(index > size) {
+        if (index > size) {
             return null;
         }
-        if(index == 0) {
+        if (index == 0) {
             return first.next;
         }
         return getNodeRecursive(first.next, index - 1);
