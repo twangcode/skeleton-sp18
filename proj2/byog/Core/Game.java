@@ -100,15 +100,27 @@ public class Game {
         // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
-        
+
+//        String formatedInput = input.toLowerCase();
+//
+//        if formatedInput.startsWith('l'){
+//            loadWorld();
+//        } else if (formatedInput.startsWith('n')) {
+//            startNewGame(formatedInput);
+//        }
+//        int index = formatedInput.indexOf('s');
+//        long seed = (long) Integer.parseInt(formatedInput.substring(1, index));
+
+        long seed = 1234;
+
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
 
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
-        drawWorld(finalWorldFrame, 1234);
+        drawWorld(finalWorldFrame, seed);
 
         ter.renderFrame(finalWorldFrame);
-
+        System.out.println(seed);
         return finalWorldFrame;
     }
 }
