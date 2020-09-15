@@ -18,7 +18,7 @@ public class Palindrome {
         return isPalinDromeDeque(charDeque);
     }
 
-    private boolean isPalinDromeDeque(Deque<Character> charDeque, CharacterComparator cc){
+    private boolean isPalinDromeDeque(Deque<Character> charDeque, CharacterComparator cc) {
         if (charDeque.size() <= 1) {
             return true;
         }
