@@ -9,6 +9,16 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
     /* Array for storing the buffer data. */
     private T[] rb;
 
+    @Override
+    public boolean isFull() {
+        return (fillCount == capacity);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return (fillCount == 0);
+    }
+
     /**
      * Create a new ArrayRingBuffer with the given capacity.
      */
