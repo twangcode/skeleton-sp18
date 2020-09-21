@@ -92,8 +92,9 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
 
         public T next() {
             if (this.hasNext()) {
+                T returnItem = rb[iterPos];
                 iterPos = (iterPos + 1) / capacity;
-                return rb[iterPos];
+                return returnItem;
             }
             return null;
         }
