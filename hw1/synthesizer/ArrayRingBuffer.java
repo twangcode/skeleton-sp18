@@ -9,16 +9,6 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
     /* Array for storing the buffer data. */
     private T[] rb;
 
-    @Override
-    public boolean isFull() {
-        return (fillCount == capacity);
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return (fillCount == 0);
-    }
-
     /**
      * Create a new ArrayRingBuffer with the given capacity.
      */
@@ -75,28 +65,22 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
 
     private class ArraryRingBufferIterator implements Iterator<T> {
         private int iterPos;
+        private int numRemain;
 
         public ArraryRingBufferIterator() {
             iterPos = first;
+            numRemain = fillCount();
         }
 
         public boolean hasNext() {
-            if (iterPos >= first && (iterPos - first) < fillCount) {
-                return true;
-            }
-            if (iterPos < first && (iterPos + capacity - first) < fillCount) {
-                return true;
-            }
-            return false;
+            return numRemain > 0;
         }
 
         public T next() {
-            if (this.hasNext()) {
-                T returnItem = rb[iterPos];
-                iterPos = (iterPos + 1) / capacity;
-                return returnItem;
-            }
-            return null;
+            T returnItem = rb[iterPos];
+            iterPos += 1;
+            numRemain -= 1;
+            return returnItem;
         }
     }
 }

@@ -15,7 +15,7 @@ public abstract class AbstractBoundedQueue<T> implements BoundedQueue<T> {
     }
 //    /** Return true if the buffer is empty. */
 //    public boolean isEmpty() {
-//        return (fillCount == 0);
+//
 //    }
 //
 //    /** Return true if the buffer is full. */
