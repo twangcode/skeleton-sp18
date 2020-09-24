@@ -2,8 +2,8 @@ package byog.Core;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
-import byog.Core.RandomUtils;
-import org.junit.Test;
+//import byog.Core.RandomUtils;
+//import org.junit.Test;
 
 import java.util.Random;
 
@@ -14,7 +14,7 @@ public class Room {
     private int positionY;
     private TETile shape;
     
-    public Room(int width, int height, int positionX, int positionY, TETile shape){
+    public Room(int width, int height, int positionX, int positionY, TETile shape) {
         this.width = width;
         this.height = height;
         this.positionX = positionX;
@@ -30,17 +30,19 @@ public class Room {
         return positionY;
     }
 
-    public static Room addRandomRoom(Random random, int worldWidth, int worldHeight){
+    public static Room addRandomRoom(Random random, int worldWidth, int worldHeight) {
         int width = RandomUtils.uniform(random, 2, worldWidth / 4);
-        int height = RandomUtils.uniform(random, 2, worldHeight / 4);;
-        int positionX = RandomUtils.uniform(random, worldWidth - width);;
-        int positionY = RandomUtils.uniform(random, worldHeight - height);;
+        int height = RandomUtils.uniform(random, 2, worldHeight / 4);
+        int positionX = RandomUtils.uniform(random, worldWidth - width);
+        int positionY = RandomUtils.uniform(random, worldHeight - height);
         
         Room room = new Room(width, height, positionX, positionY, Tileset.FLOOR);
         return room;
     }
 
-    private void drawHallway(int positionX1, int positionY1, int positionX2, int positionY2, TETile[][] world) {
+    private void drawHallway(int positionX1, int positionY1,
+                             int positionX2, int positionY2,
+                             TETile[][] world) {
         int x1 = 0, x2 = 0, y1 = 0, y2 = 0;
         if (positionX1 > positionX2) {
             x1 = positionX2;
@@ -71,8 +73,8 @@ public class Room {
     }
     
     public void draw(TETile[][] world) {
-        for (int x = positionX; x < positionX+width; x += 1) {
-            for (int y = positionY; y < positionY+height; y += 1) {
+        for (int x = positionX; x < positionX + width; x += 1) {
+            for (int y = positionY; y < positionY + height; y += 1) {
                 world[x][y] = shape;
             }
         }
