@@ -45,7 +45,7 @@ public class HexWorld {
      * Draw one Hexagon of given length and position.
      */
     public static void addHexagon (TETile[][] world, TETile shape, int length, int positionX, int positionY) {
-        if (positionX<length-1 || positionX+length<WIDTH || positionY<0 || positionY+2*length<HEIGHT) {
+        if (positionX<length-1 || positionX+length>WIDTH || positionY<0 || positionY+2*length>HEIGHT) {
             return;
         }
         for (int i=0; i<length; i+=1){
@@ -63,7 +63,7 @@ public class HexWorld {
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         drawBackground(world);
 
-        addHexagon(world, Tileset.WALL, 5, 0, 0);
+        addHexagon(world, Tileset.WALL, 5, 10, 10);
 
         ter.renderFrame(world);
     }

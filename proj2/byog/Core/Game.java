@@ -15,6 +15,7 @@ public class Game {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 80;
+    private long SEED = 0;
 
     private static List<Room> addRooms(TETile[][] world, Random r){
         List<Room> rooms = new ArrayList<Room>();
@@ -101,26 +102,23 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
 
-//        String formatedInput = input.toLowerCase();
-//
-//        if formatedInput.startsWith('l'){
-//            loadWorld();
-//        } else if (formatedInput.startsWith('n')) {
-//            startNewGame(formatedInput);
-//        }
-//        int index = formatedInput.indexOf('s');
-//        long seed = (long) Integer.parseInt(formatedInput.substring(1, index));
+        String formatedInput = input.toLowerCase();
 
-        long seed = 1234;
+        int index = 1;
+        while (index < formatedInput.length() && Character.isDigit(formatedInput.charAt(index))) {
+            index += 1;
+        }
+
+        SEED = (int) Integer.parseInt(formatedInput.substring(1, index));
 
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
 
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
-        drawWorld(finalWorldFrame, seed);
+        drawWorld(finalWorldFrame, SEED);
 
         ter.renderFrame(finalWorldFrame);
-        System.out.println(seed);
+        System.out.println(SEED);
         return finalWorldFrame;
     }
 }
