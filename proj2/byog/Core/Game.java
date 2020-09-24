@@ -17,10 +17,10 @@ public class Game {
     public static final int HEIGHT = 80;
     private long SEED = 0;
 
-    private static List<Room> addRooms(TETile[][] world, Random r){
+    private static List<Room> addRooms (TETile[][] world, Random r){
         List<Room> rooms = new ArrayList<Room>();
-        int numOfRooms = RandomUtils.uniform(r, 10,20);
-        for (int i=0; i<numOfRooms; i+=1){
+        int numOfRooms = RandomUtils.uniform(r, 10, 20);
+        for (int i = 0; i < numOfRooms; i += 1) {
             Room room = Room.addRandomRoom(r, WIDTH, HEIGHT);
             room.draw(world);
             rooms.add(room);
@@ -28,15 +28,15 @@ public class Game {
         return rooms;
     }
 
-    private static void addHallways(TETile[][] world, List<Room> rooms){
-        for (int i=0; i<rooms.size()-1; i+=1){
-            rooms.get(i).connect(world, rooms.get(i+1));
+    private static void addHallways (TETile[][] world, List<Room> rooms) {
+        for (int i = 0; i < rooms.size() - 1; i += 1){
+            rooms.get(i).connect(world, rooms.get(i + 1));
         }
     }
 
-    private static void addWall(TETile[][] world, int positionX, int positionY){
-        for (int i=Math.max(0, positionX-1); i<positionX+2; i+=1){
-            for (int j=Math.max(0, positionY-1); j<positionY+2; j+=1 ){
+    private static void addWall(TETile[][] world, int positionX, int positionY) {
+        for (int i = Math.max(0, positionX - 1); i < positionX + 2; i += 1){
+            for (int j = Math.max(0, positionY - 1); j < positionY + 2; j += 1 ){
                 if(world[i][j] == Tileset.NOTHING){
                     world[i][j] = Tileset.WALL;
                 }
@@ -44,7 +44,7 @@ public class Game {
         }
     }
 
-    private static void buildWalls(TETile[][] world){
+    private static void buildWalls(TETile[][] world) {
         int width = world.length;
         int height = world[0].length;
 
@@ -57,7 +57,7 @@ public class Game {
         }
     }
 
-    private static void drawBackground(TETile[][] world){
+    private static void drawBackground(TETile[][] world) {
         int width = world.length;
         int height = world[0].length;
 
@@ -109,7 +109,7 @@ public class Game {
             index += 1;
         }
 
-        SEED = (int) Integer.parseInt(formatedInput.substring(1, index));
+        SEED = Long.parseLong(formatedInput.substring(1, index));
 
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
