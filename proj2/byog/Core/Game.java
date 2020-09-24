@@ -29,7 +29,7 @@ public class Game {
     }
 
     private static void addHallways(TETile[][] world, List<Room> rooms) {
-        for (int i = 0; i < rooms.size() - 1; i += 1){
+        for (int i = 0; i < rooms.size() - 1; i += 1) {
             rooms.get(i).connect(world, rooms.get(i + 1));
         }
     }
@@ -37,7 +37,7 @@ public class Game {
     private static void addWall(TETile[][] world, int positionX, int positionY) {
         for (int i = Math.max(0, positionX - 1); i < positionX + 2; i += 1) {
             for (int j = Math.max(0, positionY - 1); j < positionY + 2; j += 1) {
-                if(world[i][j] == Tileset.NOTHING) {
+                if (world[i][j] == Tileset.NOTHING) {
                     world[i][j] = Tileset.WALL;
                 }
             }
@@ -110,14 +110,12 @@ public class Game {
 
         SEED = Long.parseLong(formatedInput.substring(1, index));
 
-        TERenderer worldter = new TERenderer();
-        worldter.initialize(WIDTH, HEIGHT);
+        ter.initialize(WIDTH, HEIGHT);
 
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
         drawWorld(finalWorldFrame, SEED);
 
         ter.renderFrame(finalWorldFrame);
-        System.out.println(SEED);
         return finalWorldFrame;
     }
 }
