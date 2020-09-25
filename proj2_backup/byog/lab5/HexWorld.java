@@ -1,6 +1,6 @@
 package byog.lab5;
-//import org.junit.Test;
-//import static org.junit.Assert.*;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
@@ -36,7 +36,7 @@ public class HexWorld {
      * Draw one line.
      */
     private static void addLine(TETile[][] world, TETile shape, int length, int positionX, int positionY){
-        for (int i = 0; i < length; i += 1){
+        for (int i=0; i<length; i+=1){
             world[positionX+i][positionY] = shape;
         }
     }

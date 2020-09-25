@@ -8,14 +8,14 @@ import byog.Core.RandomUtils;
 import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
-
+//import java.lang.Math;
 
 public class Game {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
-    public static final int HEIGHT = 30;
-    public long seed = 34563;
+    public static final int HEIGHT = 80;
+    private long SEED = 0;
 
     private static List<Room> addRooms(TETile[][] world, Random r) {
         List<Room> rooms = new ArrayList<Room>();
@@ -79,15 +79,6 @@ public class Game {
         buildWalls(world);
     }
 
-    private long parseInput(String input) {
-        int index = 1;
-        while (index < input.length() && Character.isDigit(input.charAt(index))) {
-            index += 1;
-        }
-
-        return Long.parseLong(input.substring(1, index));
-    }
-
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
      */
@@ -107,14 +98,23 @@ public class Game {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] playWithInputString(String input) {
-        // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
 
-        seed = parseInput(input);
+        String formatedInput = input.toLowerCase();
+
+        int index = 1;
+        while (index < formatedInput.length() && Character.isDigit(formatedInput.charAt(index))) {
+            index += 1;
+        }
+
+        SEED = Long.parseLong(formatedInput.substring(1, index));
+
+        ter.initialize(WIDTH, HEIGHT);
 
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
-        drawWorld(finalWorldFrame, seed);
+        drawWorld(finalWorldFrame, SEED);
+
         ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
     }
