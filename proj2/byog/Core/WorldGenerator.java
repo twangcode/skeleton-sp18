@@ -138,7 +138,8 @@ public class WorldGenerator {
 
     /** Add wall to a floor */
     private void addWall(int positionX, int positionY) {
-        for (int i = Math.max(0, positionX - 1); i < Math.min(size.width, positionX + 2); i++) {
+        for (int i = Math.max(0, positionX - 1);
+             i < Math.min(size.width, positionX + 2); i++) {
             for (int j = Math.max(0, positionY - 1);
                  j < Math.min(size.height, positionY + 2); j++) {
                 if (world[i][j] == Tileset.NOTHING) {
