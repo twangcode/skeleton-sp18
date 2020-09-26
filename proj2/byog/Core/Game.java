@@ -46,7 +46,6 @@ public class Game {
     public TETile[][] playWithInputString(String input) {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
-        ter.initialize(WIDTH, HEIGHT);
         long seed = processInput(input);
         WorldGenerator wg = new WorldGenerator(WIDTH, HEIGHT, seed);
         TETile[][] finalWorld = wg.generate();
