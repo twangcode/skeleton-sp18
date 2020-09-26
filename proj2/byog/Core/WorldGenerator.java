@@ -104,7 +104,7 @@ public class WorldGenerator {
     }
 
     /** Generate a List of Rooms */
-    private List<Room> addRooms(long seed) {
+    private List<Room> addRooms() {
         List<Room> rooms = new ArrayList<Room>();
         Random random = new Random(seed);
         int numRooms = RandomUtils.uniform(random, MINROOMNUM, MAXROOMNUM);
@@ -115,7 +115,7 @@ public class WorldGenerator {
     }
 
     /** Connect two rooms */
-    private void connect (Room r1, Room r2) {
+    private void connect(Room r1, Room r2) {
         int xMin = Math.min(r1.pos.xCoordinate, r2.pos.xCoordinate);
         int xMax = Math.max(r1.pos.xCoordinate, r2.pos.xCoordinate);
         int yMin = Math.min(r1.pos.yCoordinate, r2.pos.yCoordinate);
@@ -139,7 +139,8 @@ public class WorldGenerator {
     /** Add wall to a floor */
     private void addWall(int positionX, int positionY) {
         for (int i = Math.max(0, positionX - 1); i < Math.min(size.width, positionX + 2); i++) {
-            for (int j = Math.max(0, positionY - 1); j < Math.min(size.height, positionY + 2); j++) {
+            for (int j = Math.max(0, positionY - 1);
+                 j < Math.min(size.height, positionY + 2); j++) {
                 if (world[i][j] == Tileset.NOTHING) {
                     world[i][j] = Tileset.WALL;
                 }
@@ -161,7 +162,7 @@ public class WorldGenerator {
     // Package-protected method:
     protected TETile[][] generate() {
         initialize();
-        List<Room> rooms = addRooms(seed);  //TODO: randomize numRooms
+        List<Room> rooms = addRooms();
         connectRooms(rooms);
         buildWalls();
 
