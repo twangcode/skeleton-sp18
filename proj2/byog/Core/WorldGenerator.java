@@ -4,37 +4,42 @@ import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 import byog.TileEngine.TERenderer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class WorldGenerator {
     // Constants:
-    private static final int MAXROOMWIDTH = 10;
-    private static final int MINROOMWIDTH = 2;
-    private static final int MAXROOMHEIGHT = 10;
-    private static final int MINROOMHEIGHT = 2;
-    private static final int MINROOMNUM = 10;
-    private static final int MAXROOMNUM = 25;
+    private static final int MAXROOMWIDTH = 15;
+    private static final int MINROOMWIDTH = 5;
+    private static final int MAXROOMHEIGHT = 15;
+    private static final int MINROOMHEIGHT = 5;
+    private static final int MINROOMNUM = 6;
+    private static final int MAXROOMNUM = 7;
 
     // Private fields:
     private Size size;
     private TETile[][] world;
-    private long seed;
+    private Random random;
+    private Set<Position> floors = new HashSet<>();
+    private Position playerPosition;
 
     // Constructor:
     WorldGenerator(Size size, long seed) {
         this.size = size;
-        this.seed = seed;
+        random = new Random(seed);
     }
 
     WorldGenerator(int w, int h, long seed) {
         this.size = new Size(w, h);
-        this.seed = seed;
+        random = new Random(seed);
     }
 
-    // Private helper class:
-    private class Position {
+    WorldGenerator(int w, int h, Random random) {
+        this.size = new Size(w, h);
+        this.random = random;
+    }
+
+    // Shared class
+    protected static class Position {
         private int xCoordinate;
         private int yCoordinate;
 
@@ -43,8 +48,25 @@ public class WorldGenerator {
             xCoordinate = x;
             yCoordinate = y;
         }
+
+        public int getxCoordinate() {
+            return xCoordinate;
+        }
+
+        public int getyCoordinate() {
+            return yCoordinate;
+        }
+
+        public void setxCoordinate(int x) {
+            xCoordinate = x;
+        }
+
+        public void setyCoordinate(int y) {
+            yCoordinate = y;
+        }
     }
 
+    // Private helper class:
     private class Size {
         private int width;
         private int height;
@@ -88,6 +110,8 @@ public class WorldGenerator {
         for (int i = x; i < x + width; i++) {
             for (int j = y; j < y + height; j++) {
                 world[i][j] = Tileset.FLOOR;
+                Position floor = new Position(i, j);
+                floors.add(floor);
             }
         }
     }
@@ -105,8 +129,7 @@ public class WorldGenerator {
 
     /** Generate a List of Rooms */
     private List<Room> addRooms() {
-        List<Room> rooms = new ArrayList<Room>();
-        Random random = new Random(seed);
+        List<Room> rooms = new ArrayList<>();
         int numRooms = RandomUtils.uniform(random, MINROOMNUM, MAXROOMNUM);
         for (int i = 0; i < numRooms; i++) {
             rooms.add(addRandomRoom(random));
@@ -123,16 +146,21 @@ public class WorldGenerator {
 
         for (int x = xMin; x <= xMax; x++) {
             world[x][yMin] = Tileset.FLOOR;
+            floors.add(new Position(x, yMin));
         }
         for (int y = yMin; y <= yMax; y++) {
             world[xMax][y] = Tileset.FLOOR;
+            floors.add(new Position(xMax, y));
         }
     }
 
     /** Connect all rooms */
     private void connectRooms(List<Room> rooms) {
-        for (int i = 0; i < rooms.size() - 1; i++) {
-            connect(rooms.get(i), rooms.get(i + 1));
+        for (int i = 0; i < rooms.size(); i++) {
+            for (int j = i + 1; j < rooms.size(); j++) {
+                connect(rooms.get(i), rooms.get(j));
+            }
+
         }
     }
 
@@ -151,13 +179,16 @@ public class WorldGenerator {
 
     /** Build walls for all rooms */
     private void buildWalls() {
-        for (int i = 0; i < size.width; i++) {
-            for (int j = 0; j < size.height; j++) {
-                if (world[i][j] == Tileset.FLOOR) {
-                    addWall(i, j);
-                }
-            }
+        for (Position floor : floors) {
+            addWall(floor.xCoordinate, floor.yCoordinate);
         }
+    }
+
+    private void setPlayerInitialPosition() {
+        int index = RandomUtils.uniform(random, 0, floors.size());
+        List<Position> floorsList = new ArrayList<Position>(floors);
+        playerPosition = floorsList.get(index);
+        world[playerPosition.xCoordinate][playerPosition.yCoordinate] = Tileset.PLAYER;
     }
 
     // Package-protected method:
@@ -166,8 +197,13 @@ public class WorldGenerator {
         List<Room> rooms = addRooms();
         connectRooms(rooms);
         buildWalls();
+        setPlayerInitialPosition();
 
         return world;
+    }
+
+    protected Position getPlayerPosition(){
+        return playerPosition;
     }
 
     // Main method for test purposes:
