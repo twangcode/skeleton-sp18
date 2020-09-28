@@ -5,8 +5,15 @@ import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 import edu.princeton.cs.introcs.StdDraw;
 
-import java.awt.*;
-import java.io.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Random;
 
 public class Game {
@@ -19,7 +26,7 @@ public class Game {
     // private fields:
     // Game mode:
     private boolean setupMode = false;
-//    private boolean newGameMode;
+    private boolean playMode;
     private boolean quitMode = false;
 
     private StringBuilder seedStr = new StringBuilder();
@@ -71,8 +78,10 @@ public class Game {
 
     private void processInput(char input) {
         input = Character.toLowerCase(input);
-        hudDisplay.append(input);
-        drawHud(hudDisplay.toString());
+        if (playMode) {
+            hudDisplay.append(input);
+            drawHud(hudDisplay.toString());
+        }
         switch (input) {
             case 'n':
                 setupMode = true;
@@ -126,7 +135,7 @@ public class Game {
     }
 
     private void solicitInput() {
-        while(true) {
+        while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 processInput(StdDraw.nextKeyTyped());
             }
@@ -134,11 +143,15 @@ public class Game {
     }
 
     private void startNewGame() {
-        ter.initialize(WIDTH, HEIGHT);
+        if (playMode) {
+            ter.initialize(WIDTH, HEIGHT);
+        }
         WorldGenerator wg = new WorldGenerator(WIDTH, HEIGHT, random);
         world = wg.generate();
         playerPosition = wg.getPlayerPosition();
-        ter.renderFrame(world);
+        if (playMode) {
+            ter.renderFrame(world);
+        }
     }
 
     private void move(char input) {
@@ -151,7 +164,9 @@ public class Game {
                     world[playerPosition.getxCoordinate()][playerPosition.getyCoordinate()] = Tileset.FLOOR;
                     world[playerPosition.getxCoordinate()][playerPosition.getyCoordinate() - 1] = Tileset.PLAYER;
                     playerPosition.setyCoordinate(playerPosition.getyCoordinate() - 1);
-                    ter.renderFrame(world);
+                    if (playMode) {
+                        ter.renderFrame(world);
+                    }
                 }
                 return;
             case 'w':
@@ -162,7 +177,9 @@ public class Game {
                     world[playerPosition.getxCoordinate()][playerPosition.getyCoordinate()] = Tileset.FLOOR;
                     world[playerPosition.getxCoordinate()][playerPosition.getyCoordinate() + 1] = Tileset.PLAYER;
                     playerPosition.setyCoordinate(playerPosition.getyCoordinate() + 1);
-                    ter.renderFrame(world);
+                    if (playMode) {
+                        ter.renderFrame(world);
+                    }
                 }
                 return;
             case 'a':
@@ -173,7 +190,9 @@ public class Game {
                     world[playerPosition.getxCoordinate()][playerPosition.getyCoordinate()] = Tileset.FLOOR;
                     world[playerPosition.getxCoordinate() - 1][playerPosition.getyCoordinate()] = Tileset.PLAYER;
                     playerPosition.setxCoordinate(playerPosition.getxCoordinate() - 1);
-                    ter.renderFrame(world);
+                    if (playMode) {
+                        ter.renderFrame(world);
+                    }
                 }
                 return;
             case 'd':
@@ -184,8 +203,11 @@ public class Game {
                     world[playerPosition.getxCoordinate()][playerPosition.getyCoordinate()] = Tileset.FLOOR;
                     world[playerPosition.getxCoordinate() + 1][playerPosition.getyCoordinate()] = Tileset.PLAYER;
                     playerPosition.setxCoordinate(playerPosition.getxCoordinate() + 1);
-                    ter.renderFrame(world);
+                    if (playMode) {
+                        ter.renderFrame(world);
+                    }
                 }
+            default:
                 return;
         }
     }
@@ -212,7 +234,9 @@ public class Game {
     }
 
     private void loadGame() {
-        ter.initialize(WIDTH, HEIGHT);
+        if (playMode) {
+            ter.initialize(WIDTH, HEIGHT);
+        }
         File savedFile = new File(SAVEFILE);
         try {
             FileInputStream fin = new FileInputStream(savedFile);
@@ -231,7 +255,9 @@ public class Game {
         }
 
         playerPosition = findPlayer(world);
-        ter.renderFrame(world);
+        if (playMode) {
+            ter.renderFrame(world);
+        }
     }
 
     private WorldGenerator.Position findPlayer(TETile[][] world) {
@@ -250,6 +276,7 @@ public class Game {
      * Method used for playing a fresh game. The game should start from the main menu.
      */
     public void playWithKeyboard() {
+        playMode = true;
         openWelcomeWindow();
         solicitInput();
     }
@@ -273,14 +300,13 @@ public class Game {
 //        WorldGenerator wg = new WorldGenerator(WIDTH, HEIGHT, seed);
 //        TETile[][] finalWorld = wg.generate();
 //        return finalWorld;
+        playMode = false;
         solicitInput(input);
         return world;
     }
     // Main method for testing purposes:
     public static void main(String[] args) {
         Game game = new Game();
-//        TETile[][] world = game.playWithInputString("n123sswwdasdassadwas");
-//        game.ter.renderFrame(world);
         game.playWithKeyboard();
     }
 }
