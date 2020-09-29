@@ -115,8 +115,9 @@ public class Game {
                 if (quitMode) {
                     saveAndQuit();
                     quitMode = false;
+                } else {
+                    System.exit(0);
                 }
-                System.exit(0);
                 break;
             default:
                 if (Character.isDigit(input)) {
