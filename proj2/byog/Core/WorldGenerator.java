@@ -131,8 +131,12 @@ public class WorldGenerator {
     private List<Room> addRooms() {
         List<Room> rooms = new ArrayList<>();
         int numRooms = RandomUtils.uniform(random, MINROOMNUM, MAXROOMNUM);
+        int playerRoomNum = RandomUtils.uniform(random, 0, numRooms);
         for (int i = 0; i < numRooms; i++) {
             rooms.add(addRandomRoom(random));
+            if (i == playerRoomNum) {
+                setPlayerInitialPosition(rooms, playerRoomNum);
+            }
         }
         return rooms;
     }
@@ -184,10 +188,8 @@ public class WorldGenerator {
         }
     }
 
-    private void setPlayerInitialPosition() {
-        int index = RandomUtils.uniform(random, 0, floors.size());
-        List<Position> floorsList = new ArrayList<Position>(floors);
-        playerPosition = floorsList.get(index);
+    private void setPlayerInitialPosition(List<Room> rooms, int playerRoomNum) {
+        playerPosition = rooms.get(playerRoomNum).pos;
         world[playerPosition.xCoordinate][playerPosition.yCoordinate] = Tileset.PLAYER;
     }
 
@@ -197,7 +199,6 @@ public class WorldGenerator {
         List<Room> rooms = addRooms();
         connectRooms(rooms);
         buildWalls();
-        setPlayerInitialPosition();
 
         return world;
     }
