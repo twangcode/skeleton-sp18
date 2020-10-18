@@ -70,11 +70,11 @@ public class Percolation {
             if (row == 0) {
                 ds.union(position(row, col), 0);
             }
-            if (row == N - 1) {
-                if (!percolates()) {
-                    ds.union(position(row, col), N * N + 1);
-                }
-            }
+//            if (row == N - 1) {
+//                if (!percolates()) {
+//                    ds.union(position(row, col), N * N + 1);
+//                }
+//            }
             Site[] neighbors = getNeighbors(sites[row][col]);
             for (int i = 0; i < neighbors.length; i++) {
                 if (neighbors[i] != null && neighbors[i].isOpen()) {
@@ -104,5 +104,9 @@ public class Percolation {
 
     public boolean percolates() {
         return (ds.connected(0, N * N + 1));
+    }
+
+    public static void main(String[] args) {
+        Percolation test = new Percolation(100);
     }
 }
