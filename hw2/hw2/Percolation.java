@@ -27,6 +27,7 @@ public class Percolation {
     private Site[][] sites;
     private int N;
     private WeightedQuickUnionUF ds;
+    private WeightedQuickUnionUF backwash;
     private int numOpenSites;
 
     private int position(int row, int col) {
@@ -56,6 +57,7 @@ public class Percolation {
             }
         }
         ds = new WeightedQuickUnionUF(N * N + 2);
+        backwash = new WeightedQuickUnionUF(N * N + 2);
         numOpenSites = 0;
     }
 
@@ -69,16 +71,16 @@ public class Percolation {
             numOpenSites++;
             if (row == 0) {
                 ds.union(position(row, col), 0);
+                backwash.union(position(row, col), 0);
             }
-//            if (row == N - 1) {
-//                if (!percolates()) {
-//                    ds.union(position(row, col), N * N + 1);
-//                }
-//            }
+            if (row == N - 1) {
+                backwash.union(position(row, col), N * N + 1);
+            }
             Site[] neighbors = getNeighbors(sites[row][col]);
             for (int i = 0; i < neighbors.length; i++) {
                 if (neighbors[i] != null && neighbors[i].isOpen()) {
                     ds.union(position(row, col), position(neighbors[i].row, neighbors[i].col));
+                    backwash.union(position(row, col), position(neighbors[i].row, neighbors[i].col));
                 }
             }
         }
@@ -103,7 +105,7 @@ public class Percolation {
     }
 
     public boolean percolates() {
-        return (ds.connected(0, N * N + 1));
+        return (backwash.connected(0, N * N + 1));
     }
 
     public static void main(String[] args) {
