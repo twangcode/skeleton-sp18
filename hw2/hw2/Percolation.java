@@ -80,7 +80,8 @@ public class Percolation {
             for (int i = 0; i < neighbors.length; i++) {
                 if (neighbors[i] != null && neighbors[i].isOpen()) {
                     ds.union(position(row, col), position(neighbors[i].row, neighbors[i].col));
-                    backwash.union(position(row, col), position(neighbors[i].row, neighbors[i].col));
+                    backwash.union(position(row, col),
+                            position(neighbors[i].row, neighbors[i].col));
                 }
             }
         }
