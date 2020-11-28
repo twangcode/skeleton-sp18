@@ -120,13 +120,20 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
-        Node node = removeHelper(key, root);
-        if (node == null) {
-            return null;
+//        Node node = removeHelper(key, root);
+//        if (node == null) {
+//            return null;
+//        }
+//        root = node;
+//        size -= 1;
+//        return node.value;
+        V value = get(key);
+        if (value != null) {
+            root = removeHelper(key, root);
+            size -= 1;
+            return value;
         }
-        root = node;
-        size -= 1;
-        return node.value;
+        return null;
     }
 
     private Node min(Node node) {
@@ -185,5 +192,28 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     @Override
     public Iterator<K> iterator() {
         return keyset.iterator();
+    }
+
+    public static void main(String[] args) {
+        BSTMap rightChild = new BSTMap();
+        rightChild.put('A', 1);
+        rightChild.put('B', 2);
+        Integer result = (Integer) rightChild.remove('A');
+        System.out.println(result);
+
+        for (int i = 0; i < 10; i++) {
+            rightChild.put((char) ('C'+i), 3+i);
+        }
+        rightChild.put('A', 100);
+        System.out.println(rightChild.remove('D'));
+        System.out.println(rightChild.remove('G'));
+        System.out.println(rightChild.remove('A'));
+        System.out.println(rightChild.size());
+
+        BSTMap leftChild = new BSTMap();
+        leftChild.put('B', 1);
+        leftChild.put('A', 2);
+        System.out.println(leftChild.remove('B'));
+        System.out.println(leftChild.size());
     }
 }
