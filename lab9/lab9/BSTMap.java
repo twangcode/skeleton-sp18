@@ -120,12 +120,13 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
-        if (keyset.contains(key)) {
-            Node node = removeHelper(key, root);
-            size -= 1;
-            return node.value;
+        Node node = removeHelper(key, root);
+        if (node == null) {
+            return null;
         }
-        return null;
+        root = node;
+        size -= 1;
+        return node.value;
     }
 
     private Node min(Node node) {
